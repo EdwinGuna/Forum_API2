@@ -100,7 +100,10 @@ class CommentRepositoryPostgres extends CommentRepository {
   
     const result = await this._pool.query(query);
     if (!result.rowCount) {
+      console.log('[TEST DEBUG] masuk baris 102 - komentar tidak ditemukan di thread');
       throw new NotFoundError('KOMENTAR_TIDAK_DITEMUKAN_DI_THREAD_INI');
+    } else {
+      console.log('[TEST DEBUG] masuk kondisi BERHASIL');
     }
   }
   

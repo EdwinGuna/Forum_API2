@@ -18,7 +18,7 @@ const ServerTestHelper = {
    */
   async getAccessToken({ 
     id = `user-${nanoid(6)}`,
-    username = `user${nanoid(6)}`, //.replace(/[^a-zA-Z0-9]/g, '')},
+    username = `user${nanoid(6)}`, 
     password = 'secret',
   } = {}) {
     const server = await createServer(container);

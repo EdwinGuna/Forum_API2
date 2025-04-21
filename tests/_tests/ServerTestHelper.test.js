@@ -1,6 +1,8 @@
 const UsersTableTestHelper = require('../UsersTableTestHelper');
 const pool = require('../../src/Infrastructures/database/postgres/pool');
+const { validateLoginResponse } = require('../../tests/ServerTestHelper');
 const bcrypt = require('bcrypt');
+const ServerTestHelper = require('../../tests/ServerTestHelper');
 
 describe('ServerTestHelper (tanpa mock)', () => {
   const ServerTestHelper = require('../ServerTestHelper');
@@ -53,5 +55,63 @@ describe('ServerTestHelper (mocked)', () => {
       ServerTestHelper.getAccessToken({ id: 'fail-id', username: 'failuser' })
     ).rejects.toThrow('Gagal membuat user untuk test!');
   });
+
+  
+
+describe('validateLoginResponse', () => {
+  it('should throw error when login response has no data', () => {
+    const badResponse = {
+      statusCode: 201,
+      payload: JSON.stringify({}), // tidak ada data
+    };
+
+    expect(() => ServerTestHelper._testOnly.validateLoginResponse(badResponse))
+      .toThrow('Gagal mendapatkan accessToken. Pastikan username dan password sesuai.');
+  });
+
+  it('should throw error when login response has wrong status code', () => {
+    const badResponse = {
+      statusCode: 400,
+      payload: JSON.stringify({ data: { accessToken: 'token' } }),
+    };
+
+    expect(() => ServerTestHelper._testOnly.validateLoginResponse(badResponse))
+      .toThrow('Gagal mendapatkan accessToken. Pastikan username dan password sesuai.');
+  });
 });
+
+it('should work with default parameters when no argument is provided', async () => {
+  // Reset dan mock createServer
+  jest.resetModules();
+
+  jest.doMock('../../src/Infrastructures/http/createServer', () => {
+    return () => ({
+      inject: jest.fn()
+        .mockResolvedValueOnce({
+          statusCode: 201,
+          payload: JSON.stringify({
+            data: { addedUser: { id: 'user-default' } },
+          }),
+        })
+        .mockResolvedValueOnce({
+          statusCode: 201,
+          payload: JSON.stringify({
+            data: { accessToken: 'default-access-token' },
+          }),
+        }),
+    });
+  });
+
+  const ServerTestHelper = require('../ServerTestHelper');
+  const result = await ServerTestHelper.getAccessToken(); // <-- Tanpa argumen
+
+  expect(result).toHaveProperty('accessToken', 'default-access-token');
+  expect(result).toHaveProperty('userId', 'user-default');
+});
+
+
+
+
+});
+
 
