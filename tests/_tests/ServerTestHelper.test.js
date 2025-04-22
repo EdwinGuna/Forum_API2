@@ -93,7 +93,7 @@ it('should work with default parameters when no argument is provided', async () 
           }),
         }),
 
-    }));
+    })});
 
     const result = await ServerTestHelper.getAccessToken(); // <-- Tanpa argumen
 
