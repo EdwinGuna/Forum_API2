@@ -159,8 +159,6 @@ describe('CommentRepositoryPostgres', () => {
 
     it('should throw error when owner does not exist', async () => {
       const users = await pool.query('SELECT * FROM users');
-      // eslint-disable-next-line no-console
-      console.log('🔎 Cek User di Database sebelum test verifyCommentOwner:', users.rows);
 
       // Act & Assert
       await expect(commentRepositoryPostgres.addComment({
@@ -252,50 +250,47 @@ describe('CommentRepositoryPostgres', () => {
         .rejects.toThrowError(NotFoundError);
     });
   });
-/*
-  describe('verifyCommentBelongsToThread', () => {
-    it('should throw NotFoundError when comment does not belong to thread', async () => {
-      const repo = new CommentRepositoryPostgres(pool, () => '123');
-    
-      // Masukkan data dummy jika belum ada di test DB
-      await expect(repo.verifyCommentBelongsToThread('comment-x', 'thread-y'))
-        .rejects.toThrow(NotFoundError);
-    });  
-  })*/
+
   describe('verifyCommentBelongsToThread', () => {
     it('should throw NotFoundError when comment does not belong to thread', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.cleanTable();
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123', title: 'thread123',  body: 'ini isi dari thread123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-999', owner: 'user-123', title: 'thread999', body: 'ini isi dari thread999' }); // thread lain
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123', owner: 'user-123', title: 'thread123', body: 'ini isi dari thread123',
+      });
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-999', owner: 'user-123', title: 'thread999', body: 'ini isi dari thread999',
+      }); // thread lain
       await CommentsTableTestHelper.addComment({ id: 'comment-123', threadId: 'thread-123', owner: 'user-123' });
-    
+
       const repo = new CommentRepositoryPostgres(pool, () => '123');
-    
+
       // Act & Assert
       await expect(repo.verifyCommentBelongsToThread('comment-123', 'thread-999'))
-      .rejects.toThrowError('KOMENTAR_TIDAK_DITEMUKAN_DI_THREAD_INI');
+        .rejects.toThrowError('KOMENTAR_TIDAK_DITEMUKAN_DI_THREAD_INI');
     });
 
     it('should not throw error if comment belongs to thread', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.cleanTable();
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123', title: 'thread123', body: 'isi dari thread123' });
-    
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123', owner: 'user-123', title: 'thread123', body: 'isi dari thread123',
+      });
+
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         threadId: 'thread-123',
         content: 'test',
         owner: 'user-123',
       });
-    
+
       const commentRepo = new CommentRepositoryPostgres(pool, () => '123');
-    
+
       // Act & Assert
       await expect(
-        commentRepo.verifyCommentBelongsToThread('comment-123', 'thread-123')
+        commentRepo.verifyCommentBelongsToThread('comment-123', 'thread-123'),
       ).resolves.not.toThrow();
     });
   });

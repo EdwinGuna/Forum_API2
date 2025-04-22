@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const pool = require('../../database/postgres/pool');
 const createServer = require('../createServer');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
@@ -6,10 +7,10 @@ const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelp
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
 const container = require('../../container');
 const ServerTestHelper = require('../../../../tests/ServerTestHelper');
-const bcrypt = require('bcrypt');
 
 describe('/replies endpoint', () => {
-  let accessToken, userId, username;
+  let accessToken; let userId; let
+    username;
   let threadId;
   let commentId;
 
@@ -19,37 +20,12 @@ describe('/replies endpoint', () => {
     await RepliesTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
-/*
-    // Register User
-    const userPayload = {
-      username: 'testuser',
-      password: 'secret',
-      fullname: 'Test User',
-    };
 
-    const userResponse = await server.inject({
-      method: 'POST',
-      url: '/users',
-      payload: userPayload,
-    });
-
-    expect(userResponse.statusCode).toBe(201); // Pastikan user dibuat
-
-    // Login User
-    const loginResponse = await server.inject({
-      method: 'POST',
-      url: '/authentications',
-      payload: {
-        username: 'testuser',
-        password: 'secret',
-      },
-    });*/
     const user1 = await ServerTestHelper.getAccessToken({
       id: 'user-123',
-      username: 'testuser',        
-    })
+      username: 'testuser',
+    });
 
-    //const { data } = JSON.parse(loginResponse.payload);
     accessToken = user1.accessToken;
     userId = user1.userId;
     username = user1.username;
@@ -74,10 +50,6 @@ describe('/replies endpoint', () => {
 
     commentId = JSON.parse(commentResponse.payload).data.addedComment.id;
   });
-
-  afterEach(async () => {
-    //ThreadsTableTestHelper.cleanTable();
-  })
 
   afterAll(async () => {
     await pool.end();
@@ -144,7 +116,6 @@ describe('/replies endpoint', () => {
 
     it('should insert a reply with all default values', async () => {
       // Pastikan user-123, comment-123 sudah tersedia di database!
-      //await ThreadsTableTestHelper.cleanTable();
       const hashedPassword = await bcrypt.hash('secret', 10);
 
       await UsersTableTestHelper.addUser({
@@ -153,30 +124,29 @@ describe('/replies endpoint', () => {
         password: hashedPassword,
         fullname: 'Default User',
       });
-    
+
       await ThreadsTableTestHelper.addThread({
         id: 'thread-234',
         title: 'Thread Default',
         body: 'Thread ini untuk default test',
         owner: 'user-123',
       });
-    
+
       await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         threadId: 'thread-234',
         content: 'Komentar default',
         owner: 'user-123',
       });
-    
+
       // 🔥 Ini akan men-trigger default `commentId` & `owner`
       await RepliesTableTestHelper.addReply();
-    
+
       const result = await RepliesTableTestHelper.findReplyById('reply-123');
       expect(result).toHaveLength(1);
       expect(result[0].comment_id).toBe('comment-123');
       expect(result[0].owner).toBe('user-123');
     });
-    
   });
 
   describe('DELETE /threads/{threadId}/comments/{commentId}/replies/{replyId}', () => {

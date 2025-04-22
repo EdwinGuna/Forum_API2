@@ -1,6 +1,5 @@
 class NewComment {
   constructor(payload) {
-    // const { content, owner, threadId } = payload;
     const {
       content, owner, threadId, date = new Date().toISOString(), isDeleted = false,
     } = payload;

@@ -9,17 +9,18 @@ const GetThreadDetailUseCase = require('../../../Applications/use_case/GetThread
 const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 
 describe('/threads endpoint', () => {
-  let accessToken, userId, username;
+  let accessToken; let userId; let
+    username;
 
   beforeAll(async () => {
     // Clean up users table and create user via ServerTestHelper
     await UsersTableTestHelper.cleanTable();
-   
+
     const user = await ServerTestHelper.getAccessToken({
       id: 'user-123',
       username: 'dicoding_thread',
     });
-    
+
     accessToken = user.accessToken;
     userId = user.userId;
     username = user.username;
@@ -169,7 +170,7 @@ describe('/threads endpoint', () => {
       // Buat thread lewat helper (owner: userId)
       await UsersTableTestHelper.addUser({
         id: userId,
-        username: username, // sesuai yang dipakai saat login
+        username, // sesuai yang dipakai saat login
         password: 'secret',
         fullname: 'Dicoding Indonesia',
       });
@@ -240,7 +241,7 @@ describe('/threads endpoint', () => {
 
       await UsersTableTestHelper.addUser({
         id: userId,
-        username: username, // sesuai yang dipakai saat login
+        username, // sesuai yang dipakai saat login
         password: 'secret',
         fullname: 'Dicoding Indonesia',
       });
@@ -261,4 +262,3 @@ describe('/threads endpoint', () => {
     });
   });
 });
-

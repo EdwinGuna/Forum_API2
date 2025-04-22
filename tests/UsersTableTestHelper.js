@@ -8,7 +8,6 @@ const UsersTableTestHelper = {
     const existingUsers = await this.findUsersById(id);
     if (existingUsers.length > 0) {
       // eslint-disable-next-line no-console
-      console.log(`⚠️ User ${username} sudah ada, tidak perlu ditambahkan lagi.`);
       return;
     }
     const query = {
