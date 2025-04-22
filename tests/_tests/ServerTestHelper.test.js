@@ -73,12 +73,13 @@ describe('ServerTestHelper (mocked)', () => {
     });
   });
 
-  it('should work with default parameters when no argument is provided', async () => {
-  // Reset dan mock createServer
-    jest.resetModules();
+it('should work with default parameters when no argument is provided', async () => {
+  jest.resetModules();
 
-    jest.doMock('../../src/Infrastructures/http/createServer', () => () => ({
-      inject: jest.fn()
+  jest.doMock('../../src/Infrastructures/http/createServer', () => {
+    return () => ({
+      inject: jest
+        .fn()
         .mockResolvedValueOnce({
           statusCode: 201,
           payload: JSON.stringify({
@@ -91,7 +92,8 @@ describe('ServerTestHelper (mocked)', () => {
             data: { accessToken: 'default-access-token' },
           }),
         }),
-    }));
+
+    })});
 
     const result = await ServerTestHelper.getAccessToken(); // <-- Tanpa argumen
 
@@ -99,3 +101,4 @@ describe('ServerTestHelper (mocked)', () => {
     expect(result).toHaveProperty('userId', 'user-default');
   });
 });
+
