@@ -109,7 +109,9 @@ it('should work with default parameters when no argument is provided', async () 
   expect(result).toHaveProperty('userId', 'user-default');
 });
 
-
+test.skip('should work with default parameters when no argument is provided', async () => {
+  // ...
+});
 
 
 });
