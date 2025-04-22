@@ -79,6 +79,36 @@ describe('validateLoginResponse', () => {
       .toThrow('Gagal mendapatkan accessToken. Pastikan username dan password sesuai.');
   });
 });
+
+it('should work with default parameters when no argument is provided', async () => {
+  jest.resetModules();
+
+  jest.doMock('../../src/Infrastructures/http/createServer', () => {
+    return () => ({
+      inject: jest
+        .fn()
+        .mockResolvedValueOnce({
+          statusCode: 201,
+          payload: JSON.stringify({
+            data: { addedUser: { id: 'user-default' } },
+          }),
+        })
+        .mockResolvedValueOnce({
+          statusCode: 201,
+          payload: JSON.stringify({
+            data: { accessToken: 'default-access-token' },
+          }),
+        }),
+    });
+  });
+
+  const ServerTestHelper = require('../ServerTestHelper');
+  const result = await ServerTestHelper.getAccessToken();
+
+  expect(result).toHaveProperty('accessToken', 'default-access-token');
+  expect(result).toHaveProperty('userId', 'user-default');
+});
+
 /*
 it('should work with default parameters when no argument is provided', async () => {
   // Reset dan mock createServer
@@ -108,10 +138,6 @@ it('should work with default parameters when no argument is provided', async () 
   expect(result).toHaveProperty('accessToken', 'default-access-token');
   expect(result).toHaveProperty('userId', 'user-default');
 });*/
-
-test.skip('should work with default parameters when no argument is provided', async () => {
-  // ...
-});
 
 
 });
