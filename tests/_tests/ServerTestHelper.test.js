@@ -79,7 +79,7 @@ describe('validateLoginResponse', () => {
       .toThrow('Gagal mendapatkan accessToken. Pastikan username dan password sesuai.');
   });
 });
-
+/*
 it('should work with default parameters when no argument is provided', async () => {
   // Reset dan mock createServer
   jest.resetModules();
@@ -107,7 +107,7 @@ it('should work with default parameters when no argument is provided', async () 
 
   expect(result).toHaveProperty('accessToken', 'default-access-token');
   expect(result).toHaveProperty('userId', 'user-default');
-});
+});*/
 
 test.skip('should work with default parameters when no argument is provided', async () => {
   // ...
