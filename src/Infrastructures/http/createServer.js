@@ -54,7 +54,7 @@ const createServer = async (container) => {
       plugin: replies,
       options: { container },
     },
-    
+
   ]);
 
   server.ext('onPreResponse', (request, h) => {

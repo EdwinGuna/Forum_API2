@@ -12,6 +12,8 @@ describe('CommentRepository interface', () => {
       + '_IMPLEMENTED');
     await expect(commentRepository.getCommentsByThreadId('thread-123')).rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(commentRepository.verifyCommentExist('comment-123')).rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
-    await expect(commentRepository.verifyCommentBelongsToThread('comment-123', 'thread-123')).rejects.toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    const verify = commentRepository.verifyCommentBelongsToThread;
+    await expect(verify('comment-123', 'thread-123')).rejects
+      .toThrowError('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });

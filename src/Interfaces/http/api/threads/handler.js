@@ -28,8 +28,6 @@ class ThreadsHandler {
 
     const threadDetail = await this._getThreadDetailUseCase.execute({ threadId });
 
-    console.log('🧾 Final threadDetail:', JSON.stringify(threadDetail, null, 2));
-
     const response = h.response({
       status: 'success',
       data: {

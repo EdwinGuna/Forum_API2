@@ -45,7 +45,7 @@ describe('AddCommentUseCase', () => {
     // Assert: verifikasi bahwa fungsi pada repository terpanggil dengan parameter yang benar
     expect(mockUsersRepository.verifyUserExist).toBeCalledWith(useCasePayload.owner);
     expect(mockThreadsRepository.verifyAvailableThread).toBeCalledWith(useCasePayload.threadId);
-    // expect(mockCommentsRepository.addComment).toBeCalledWith(useCasePayload);
+
     expect(mockCommentsRepository.addComment).toBeCalledWith(expect.any(NewComment));
 
     // Verifikasi bahwa hasilnya adalah instance AddedComment dengan data yang sesuai

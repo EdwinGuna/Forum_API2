@@ -22,7 +22,6 @@ class GetThreadDetailUseCase {
     const enrichedComments = comments.map((comment, index) => {
       const replies = (repliesArray[index] || []).map((reply) => {
         const mapped = mapDBToReplyModel(reply);
-        console.log('🧪 Data yang masuk ke ReplyDetail:', mapped);
         return new ReplyDetail(mapped);
       });
 

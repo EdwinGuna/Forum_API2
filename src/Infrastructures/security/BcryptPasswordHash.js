@@ -10,9 +10,7 @@ class BcryptPasswordHash extends EncryptionHelper {
   }
 
   async hash(password) {
-    console.log('🛠 Sedang melakukan hashing password:', password);
     const hashedPassword = await this._bcrypt.hash(password, this._saltRound);
-    console.log('🛠 Sedang melakukan hashing password:', password);
     return hashedPassword;
   }
 

@@ -11,7 +11,8 @@ const container = require('../../container');
 const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 
 describe('Comments Endpoints', () => {
-  let server, accessToken, userId, username;
+  let server; let accessToken; let userId; let
+    username;
 
   beforeAll(async () => {
     server = await createServer(container);
@@ -25,29 +26,11 @@ describe('Comments Endpoints', () => {
     });
 
     console.log('✅ USER RESULT:', user);
-    
+
     accessToken = user.accessToken;
     userId = user.userId;
     username = user.username;
-/*
-    const hashedPassword = await bcrypt.hash('secret', 10);
 
-    await UsersTableTestHelper.addUser({
-      id: 'user-123',
-      username: 'dicoding',
-      password: hashedPassword,
-      fullname: 'Dicoding Indonesia',
-    });
-
-    const loginResponse = await request(server.listener).post('/authentications').send({
-      username: 'dicoding',
-      password: 'secret',
-    });
-
-    if (!loginResponse.body.data || !loginResponse.body.data.accessToken) {
-      throw new Error('Login gagal! Tidak ada access token yang dikembalikan.');
-    }*/
-    
     // Gunakan userId dari response saat membuat thread
     await ThreadsTableTestHelper.addThread({
       id: 'thread-123',
@@ -59,9 +42,6 @@ describe('Comments Endpoints', () => {
 
   beforeEach(async () => {
     await CommentsTableTestHelper.cleanTable();
-    // Tambahkan kembali thread-123 setelah dibersihkan
-  
-    
   });
 
   afterEach(async () => {
@@ -74,7 +54,6 @@ describe('Comments Endpoints', () => {
       owner: userId,
     });
   });
-
 
   afterAll(async () => {
     await CommentsTableTestHelper.cleanTable();
@@ -166,8 +145,6 @@ describe('Comments Endpoints', () => {
     });
 
     it('should throw THREAD_NOT_FOUND error when adding comment to non-existent thread', async () => {
-      //await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dicoding' });
-
       await expect(CommentsTableTestHelper.addComment({
         threadId: 'nonexistent-thread',
         content: 'Comment for invalid thread',

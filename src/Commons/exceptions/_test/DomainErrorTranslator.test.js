@@ -19,7 +19,7 @@ describe('DomainErrorTranslator', () => {
     ['NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION', 'tidak dapat menambahkan komentar karena tipe data tidak sesuai'],
     ['NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY', 'tidak dapat menambahkan balasan karena properti yang dibutuhkan tidak ada'],
     ['NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION', 'tidak dapat menambahkan balasan karena tipe data tidak sesuai'],
-    
+
   ];
 
   it('should translate all known errors correctly', () => {
